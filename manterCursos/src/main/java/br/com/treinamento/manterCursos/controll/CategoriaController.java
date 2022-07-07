@@ -18,11 +18,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import org.springframework.web.bind.annotation.RestController;
 
+
 import br.com.treinamento.manterCursos.entities.Categoria;
+import br.com.treinamento.manterCursos.entities.Curso;
 import br.com.treinamento.manterCursos.repository.ICategoriaRepository;
+import br.com.treinamento.manterCursos.repository.ICursoRepository;
 import br.com.treinamento.manterCursos.request.CategoriaPostRequest;
 import br.com.treinamento.manterCursos.request.CategoriaPutRequest;
 import br.com.treinamento.manterCursos.response.CategoriaGetResponse;
+import br.com.treinamento.manterCursos.response.CursoCategoriaGetResponse;
 import io.swagger.annotations.ApiOperation;
 
 
@@ -32,6 +36,8 @@ import io.swagger.annotations.ApiOperation;
 public class CategoriaController {
 	@Autowired
 	private ICategoriaRepository categoriaRepository;
+	@Autowired
+	private ICursoRepository cursoRepository;
 	//metodo para
 	private static final String ENDPOINT= "api/categorias";
 
@@ -58,7 +64,7 @@ public class CategoriaController {
 	}
 
 	@RequestMapping(value=ENDPOINT, method=RequestMethod.PUT)
-    @ApiOperation("Serviço para edição de Curso")
+    @ApiOperation("Serviço para edição de Categorias")
     @CrossOrigin
     public ResponseEntity<String>put(@RequestBody CategoriaPutRequest request){
         try {
@@ -67,7 +73,7 @@ public class CategoriaController {
             if(item.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Categoria não encontrada");
             }else {
-        		Categoria categoria= new Categoria();
+        		Categoria categoria= item.get();
     			categoria.setTipo(request.getTipo());
 
 
@@ -123,22 +129,25 @@ public class CategoriaController {
 	}
 
 
-	
 	@RequestMapping(value=ENDPOINT + "/{idCategoria}", method=RequestMethod.GET)
-	@ApiOperation("Serviço para consulta de Categoria")
+	@ApiOperation("Serviço para consulta de categoria")
 	@CrossOrigin
-	public ResponseEntity<CategoriaGetResponse>getById(@PathVariable("idCategoria") Integer idCategoria) {
+	public ResponseEntity<CursoCategoriaGetResponse>getById(@PathVariable("idCategoria") Integer idCategoria) {
 		Optional<Categoria> item= categoriaRepository.findById(idCategoria);
 		if(item.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 		}else {
-			CategoriaGetResponse response= new CategoriaGetResponse();
-			Categoria categoria= item.get();
-			response.setIdCategoria(categoria.getIdCategoria());
+			CursoCategoriaGetResponse response= new CursoCategoriaGetResponse();
+			Categoria categoria= item.get();		
 			response.setTipo(categoria.getTipo());
-		
+			List<Curso> cursos = cursoRepository.findByIdCategoria(categoria.getIdCategoria());
+			for(Curso curso:cursos) {
+				response.getDescricaoCursos().add(curso.getDescricao());
+				response.getDataInicio().add(curso.getDataInicio());
+				response.getDataTermino().add(curso.getDataTermino());
+			}
 			return ResponseEntity.status(HttpStatus.OK).body(response);
-
+			
 		}
 	}
 }

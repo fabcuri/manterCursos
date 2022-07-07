@@ -18,10 +18,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.treinamento.manterCursos.entities.Categoria;
 import br.com.treinamento.manterCursos.entities.Curso;
 import br.com.treinamento.manterCursos.repository.ICursoRepository;
 import br.com.treinamento.manterCursos.request.CursoPostRequest;
 import br.com.treinamento.manterCursos.request.CursoPutRequest;
+import br.com.treinamento.manterCursos.response.CategoriaGetResponse;
 import br.com.treinamento.manterCursos.response.CursoGetResponse;
 import io.swagger.annotations.ApiOperation;
 
@@ -47,7 +49,7 @@ public class CursoController {
 			curso.setDescricao(request.getDescricao());
 			curso.setDataInicio(request.getDataInicio());
 			curso.setDataTermino(request.getDataTermino());
-			curso.setCategoria(request.getCategoria());
+		
 		
 
 			cursoRepository.save(curso);
@@ -69,11 +71,11 @@ public class CursoController {
             if(item.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Curso não encontrado");
             }else {
-            	Curso curso= new Curso();
+            	Curso curso= item.get();
     			curso.setDescricao(request.getDescricao());
     			curso.setDataInicio(request.getDataInicio());
     			curso.setDataTermino(request.getDataTermino());
-    			curso.setCategoria(request.getCategoria());
+    	
 
 
 
@@ -86,6 +88,7 @@ public class CursoController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro:"+e.getMessage());
         }
     }
+
 	
 	@RequestMapping(value=ENDPOINT + "/{idCurso}", method=RequestMethod.DELETE)
 	@ApiOperation("Serviço para exclusão de curso")
@@ -119,20 +122,15 @@ public class CursoController {
 			item.setDescricao(curso.getDescricao());
 			item.setDataInicio(curso.getDataInicio());
 			item.setDataTermino(curso.getDataTermino());
-			item.setCategoria(curso.getCategoria());
-		
-		
-		
 
 			response.add(item);
 		}
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
 
-
 	
 	@RequestMapping(value=ENDPOINT + "/{idCurso}", method=RequestMethod.GET)
-	@ApiOperation("Serviço para consulta de Aluno")
+	@ApiOperation("Serviço para consulta de curso")
 	@CrossOrigin
 	public ResponseEntity<CursoGetResponse>getById(@PathVariable("idCurso") Integer idCurso) {
 		Optional<Curso> item= cursoRepository.findById(idCurso);
@@ -145,7 +143,6 @@ public class CursoController {
 			response.setDescricao(curso.getDescricao());
 			response.setDataInicio(curso.getDataInicio());
 			response.setDataTermino(curso.getDataTermino());
-			response.setCategoria(curso.getCategoria());
 			return ResponseEntity.status(HttpStatus.OK).body(response);
 
 		}

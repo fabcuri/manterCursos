@@ -17,7 +17,7 @@ import br.com.treinamento.manterCursos.entities.Curso;
 
 	@Repository
 	public interface ICursoRepository extends CrudRepository<Curso,Integer>{
-		@Query(value="Select categoria.tipo from categoria where idCategoria=?1",nativeQuery= true)
+		@Query(value="Select * from curso where idCategoria=?1",nativeQuery= true)
 		List<Curso> findByIdCategoria(Integer idCategoria);
 
 	}

@@ -9,19 +9,16 @@ public class CursoGetResponse {
 	private String descricao;
 	private LocalDate dataInicio;
 	private LocalDate dataTermino;
-	private Categoria categoria;
 	public CursoGetResponse() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public CursoGetResponse(int idCurso, String descricao, LocalDate dataInicio, LocalDate dataTermino,
-			Categoria categoria) {
+	public CursoGetResponse(int idCurso, String descricao, LocalDate dataInicio, LocalDate dataTermino) {
 		super();
 		this.idCurso = idCurso;
 		this.descricao = descricao;
 		this.dataInicio = dataInicio;
 		this.dataTermino = dataTermino;
-		this.categoria = categoria;
 	}
 	public int getIdCurso() {
 		return idCurso;
@@ -47,11 +44,5 @@ public class CursoGetResponse {
 	public void setDataTermino(LocalDate dataTermino) {
 		this.dataTermino = dataTermino;
 	}
-	public Categoria getCategoria() {
-		return categoria;
-	}
-	public void setCategoria(Categoria categoria) {
-		this.categoria = categoria;
-	}
-}
 	
+}

@@ -1,5 +1,6 @@
 package br.com.treinamento.manterCursos.controll;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.treinamento.manterCursos.entities.Categoria;
 import br.com.treinamento.manterCursos.entities.Curso;
+import br.com.treinamento.manterCursos.entities.Log;
 import br.com.treinamento.manterCursos.repository.ICursoRepository;
 import br.com.treinamento.manterCursos.request.CursoPostRequest;
 import br.com.treinamento.manterCursos.request.CursoPutRequest;
@@ -43,7 +45,8 @@ public class CursoController {
 	@RequestMapping(value=ENDPOINT, method=RequestMethod.POST)
 	@ApiOperation("Serviço para cadastro de Curso")
 	@CrossOrigin
-	public ResponseEntity<String>post(@RequestBody CursoPostRequest request){
+	public ResponseEntity<String>post(@RequestBody CursoPostRequest request) throws IOException{
+		Log.escreverLog1();
 		try {
 			Curso curso= new Curso();
 			curso.setDescricao(request.getDescricao());
@@ -64,7 +67,8 @@ public class CursoController {
 	@RequestMapping(value=ENDPOINT, method=RequestMethod.PUT)
     @ApiOperation("Serviço para edição de Curso")
     @CrossOrigin
-    public ResponseEntity<String>put(@RequestBody CursoPutRequest request){
+    public ResponseEntity<String>put(@RequestBody CursoPutRequest request) throws IOException{
+		Log.escreverLog2();
         try {
 
             Optional<Curso> item= cursoRepository.findById(request.getIdCurso());
@@ -93,7 +97,8 @@ public class CursoController {
 	@RequestMapping(value=ENDPOINT + "/{idCurso}", method=RequestMethod.DELETE)
 	@ApiOperation("Serviço para exclusão de curso")
 	@CrossOrigin
-	public ResponseEntity<String>delete(@PathVariable("idCurso") Integer idCurso){
+	public ResponseEntity<String>delete(@PathVariable("idCurso") Integer idCurso) throws IOException{
+		Log.escreverLog4();
 		try {
 			
 			Optional<Curso> item= cursoRepository.findById(idCurso);
@@ -114,7 +119,8 @@ public class CursoController {
 	@RequestMapping(value=ENDPOINT, method=RequestMethod.GET)
 	@ApiOperation("Serviço para consulta de Curso")
 	@CrossOrigin
-	public ResponseEntity<List<CursoGetResponse>>get() {
+	public ResponseEntity<List<CursoGetResponse>>get() throws IOException {
+		Log.escreverLog3();
 		List<CursoGetResponse> response= new ArrayList<CursoGetResponse>();
 		for(Curso curso: cursoRepository.findAll()) {
 			CursoGetResponse item= new CursoGetResponse();
